@@ -40,7 +40,7 @@ function App() {
 
   return (
     <>
-      <h1>Random Password Generator</h1>
+      <h1>Password Generator</h1>
       <div className='flex flex-col gap-4'>
         <div className='flex flex-col'>
 
@@ -59,7 +59,7 @@ function App() {
 
           <div className='flex flex-col gap-4'>
 
-            <input type="range" value={passwordLength} min={0} max={20} className='w-full' onChange={(e)=>handlePasswordLength(e)} />
+            <input type="range" value={passwordLength} min={0} max={20} className='w-full cursor-grab' onChange={(e)=>handlePasswordLength(e)} />
 
             <div className='grid grid-cols-2 gap-2'>
               {checkboxes.map((checkbox, i)=>{

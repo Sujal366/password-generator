@@ -6,9 +6,10 @@ const usePasswordGenerator = () => {
 
   
   const generatePassword = (checkboxes, passwordLength) => {
-    let charset = "";
-    let generatedPassword = "";
-    const selectedOptions = checkboxes.filter((checkbox) => checkbox.state);    
+    const selectedOptions = checkboxes.filter((checkbox) => checkbox.state);
+
+    let charset = ""
+    let guarnteedChars = []
     
     if(selectedOptions.length===0){
       setErrorMessage("Select atleast one option!")
@@ -16,31 +17,35 @@ const usePasswordGenerator = () => {
       return;
     }
 
-    selectedOptions.forEach((checkbox) => {
-      switch (checkbox.title) {
-        case "Include uppercase":
-          charset += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-          break;
-        case "Include lowercase":
-          charset += "abcdefghijklmnopqrstuvwxyz";
-          break;
-        case "Include numbers":
-          charset += "0123456789";
-          break;
-        case "Include symbols":
-          charset += "!@#$%^&*()";
-          break;
-        default:
-          break;
+    const categories = {
+      "Include uppercase": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+      "Include lowercase": "abcdefghijklmnopqrstuvwxyz",
+      "Include numbers": "0123456789",
+      "Include symbols": "!@#$%^&*()",
+    };
+    
+    selectedOptions.forEach((checkbox)=>{
+      let chars = categories[checkbox.title]
+      if(chars){
+        charset+=chars
+        const randomChar = chars[Math.floor(Math.random()*chars.length)]
+        guarnteedChars.push(randomChar)
       }
-    });
+    })
 
-      for(let i=0;i<passwordLength;i++){
-        const randomIndex = Math.floor(Math.random() * charset.length)
-        generatedPassword += charset[randomIndex]
-      }
-      setPassword(generatedPassword)
-      setErrorMessage("")
+    let remainingLength = passwordLength - guarnteedChars.length;
+    
+    let passwordChars = [...guarnteedChars]
+
+    for(let i=0;i<remainingLength;i++){
+      const randomChar = charset[Math.floor(Math.random() * charset.length)]
+      passwordChars.push(randomChar)
+    }
+
+    const finalPassword = passwordChars.sort(()=>Math.random()-0.5)
+    
+    setPassword(finalPassword.join(""))
+    setErrorMessage("")
   };
   return {password, errorMessage, generatePassword}
 }
