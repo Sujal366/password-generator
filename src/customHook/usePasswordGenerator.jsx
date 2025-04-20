@@ -1,4 +1,12 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
+
+const shuffleArray = (array) => {
+  for(let i=array.length-1;i>0;i--){
+    let j = Math.floor(Math.random()*(i+1));
+    [array[i],array[j]]=[array[j],array[i]];
+  }
+  return array;
+}
 
 const usePasswordGenerator = () => {
   const [password, setPassword] = useState("");
@@ -41,8 +49,7 @@ const usePasswordGenerator = () => {
       const randomChar = charset[Math.floor(Math.random() * charset.length)]
       passwordChars.push(randomChar)
     }
-
-    const finalPassword = passwordChars.sort(()=>Math.random()-0.5)
+    const finalPassword = shuffleArray(passwordChars);
     
     setPassword(finalPassword.join(""))
     setErrorMessage("")
